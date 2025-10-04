@@ -1,6 +1,7 @@
 package main
 
 import (
+	"event-booking-go/db"
 	"event-booking-go/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -8,6 +9,7 @@ import (
 )
 
 func main() {
+	db.InitDB()
 	server := gin.Default()
 
 	server.GET("/events", getEvents)
@@ -20,7 +22,11 @@ func main() {
 }
 
 func getEvents(context *gin.Context) {
-	events := models.GetAllEvents()
+	events, err := models.GetAllEvents()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch Events. Try again Later."})
+		return
+	}
 	context.JSON(http.StatusOK, events)
 }
 
@@ -33,8 +39,14 @@ func createEvent(context *gin.Context) {
 		return
 	}
 
-	event.Id = 1
+	event.ID = 1
 	event.UserID = 1
+	err = event.Save()
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not create Event. Try again Later."})
+		return
+	}
 
 	context.JSON(http.StatusCreated, gin.H{"message": "Event Successfully Created.", "event": event})
 }
