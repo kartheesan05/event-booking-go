@@ -24,7 +24,7 @@ func signup(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{"message": "User creates succesfully."})
+	context.JSON(http.StatusCreated, gin.H{"message": "User created succesfully."})
 }
 
 func login(context *gin.Context) {
