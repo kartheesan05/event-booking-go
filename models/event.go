@@ -100,6 +100,8 @@ func (e Event) Delete() error {
 		return err
 	}
 
+	defer stmt.Close()
+
 	_, err = stmt.Exec(e.ID)
 
 	return err
