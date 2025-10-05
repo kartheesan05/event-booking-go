@@ -72,7 +72,7 @@ func GetEventByID(id int64) (*Event, error) {
 
 func (e Event) Update() error {
 	query := `
-	UPDATES events
+    UPDATE events
 	SET name = ?, description = ?, location = ?, dateTime = ?
 	WHERE id = ?
 	`
