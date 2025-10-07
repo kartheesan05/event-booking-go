@@ -2,14 +2,21 @@ package db
 
 import (
 	"database/sql"
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
+	"os"
 )
 
 var DB *sql.DB
 var err error
 
 func InitDB() {
-	DB, err = sql.Open("sqlite3", "api.db")
+	_ = godotenv.Load()
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "api.db"
+	}
+	DB, err = sql.Open("sqlite3", dbPath)
 
 	if err != nil {
 		panic("Could not connect to DataBase.")
